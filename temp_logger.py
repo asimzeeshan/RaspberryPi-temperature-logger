@@ -3,6 +3,10 @@
 # www.zagrosrobotics.com
 # 6/25/2013
 
+# Additional Modification by Asim Zeeshan
+# Dated Sep 04, 2015
+# Modified it to be run using a crontab instead of a "while True"
+
 import smbus
 import time
 import datetime
@@ -23,20 +27,13 @@ def temperature():
     #print rvalue1, rvalue2
     return rvalue
 
-print("Temperature Data Logger\n")
-
-while True:
-    
-    #Open Log File
-    f=open('tempdata.txt','a')
-    now = datetime.datetime.now()
-    timestamp = now.strftime("%Y/%m/%d %H:%M")
-    outvalue = temperature()
-    outstring = str(timestamp)+"  "+str(outvalue)+" C "+str(outvalue*1.8+32)+" F"+"\n"
-    print outstring
-    f.write(outstring)
-    f.close()
-
-    #log temperature every 60 seconds
-    time.sleep(60)
-    
+#Open Log File
+logfile=datetime.datetime.now().strftime("%Y-%m-%d")
+f=open('logs/'+logfile+'_temperature_sensor.log','a')
+now = datetime.datetime.now()
+timestamp = now.strftime("%d-%b-%Y %H:%M:%S")
+outvalue = temperature()
+outstring = "["+str(timestamp)+"]  "+str(outvalue)+" C / "+str(outvalue*1.8+32)+" F"+"\n"
+print outstring
+f.write(outstring)
+f.close()
